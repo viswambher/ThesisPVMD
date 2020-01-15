@@ -39,20 +39,47 @@ if WIDTH<=0 && angle ~= 0 && angle~= 90 % There is definitely a better way to wr
     bs = linspace(b_init,b_end,NSTEPS+2);
     bs = bs(2:end-1);
     ks = ones(length(bs),1)*b_end;
-% elseif WIDTH<=0 && angle ==0
-%     bs = linspace(b_init,b_end,NSTEPS-1); %check
-%     bs = bs(1:end);                %check
-%     ks = ones(length(bs),1)*b_end;
-% elseif  WIDTH<=0 && angle ==90
-%     bs = linspace(b_init,b_end,NSTEPS-1); %check
-%     bs = bs(1:end);                %check
-%     ks = ones(length(bs),1)*b_end;
-
+    ix = 1:NSTEPS;%Working
+elseif WIDTH<=0 && angle ==0 % Working
+    bs = linspace(b_init,b_end,NSTEPS-1); %check
+    bs = bs(1:end);                %check
+    ks = ones(length(bs),1)*b_end;
+    ix = 1:NSTEPS-1;
+elseif  WIDTH<=0 && angle ==90 % Working
+    bs = linspace(b_init,b_end,NSTEPS+3); %check
+    bs = bs(1:end);                %check
+    ks = ones(length(bs),1)*b_end;
+    ix = 1:NSTEPS+3;
+elseif WIDTH > 0 && angle == 0 % Working
+    %if mod(WIDTH,2) == 0
+     cs = linspace(b_init,b_end,((NSTEPS-2)/WIDTH)+1);
+     ix = 1 : ((NSTEPS-2)/WIDTH);
+%     else
+%      cs = linspace(b_init,b_end,(NSTEPS/WIDTH)-1);
+%      ix = 1 : (NSTEPS/WIDTH)-2
+%     end
+    cs = cs(1:end-1) -(cs(1)-cs(2))/2;
+    bs = cs + WIDTH*DIV/2;
+    ks = cs - WIDTH*DIV/2;
+    
+elseif WIDTH > 0 && angle == 90
+%     if mod(WIDTH,2) == 0
+    cs = linspace(b_init,b_end,((NSTEPS+2)/WIDTH)+1);
+    ix = 1: ((NSTEPS+2)/WIDTH) ;
+%     else 
+%     cs = linspace(b_init,b_end,((NSTEPS+2)/WIDTH)+1);
+%     ix = 1: ((NSTEPS+2)/WIDTH)+1 ;
+%     end
+    cs = cs(1:end-1) -(cs(1)-cs(2))/2;
+    bs = cs + WIDTH*DIV/2;
+    ks = cs - WIDTH*DIV/2;
+    %ix = 1: (NSTEPS/WIDTH)+2
 else
     cs = linspace(b_init,b_end,NSTEPS+1);
     cs = cs(1:end-1) -(cs(1)-cs(2))/2;
     bs = cs + WIDTH*DIV/2;
     ks = cs - WIDTH*DIV/2;
+    ix = 1:NSTEPS;
 end
 
 irr_d = irr_u-irr_s;
@@ -65,8 +92,14 @@ panel = zeros(ROWS,COLS,NSTEPS);
 % bs
 % cs
 % ks
+    
+% if angle == 0 
+% elseif angle == 90
+% else   
+% end
 
-for ix=1:NSTEPS
+
+for ix= ix(1:end)
     b=bs(ix);
     k=ks(ix);
     pexp = zeros(DIV*ROWS,DIV*COLS);
@@ -112,8 +145,8 @@ for ix=1:NSTEPS
         axis equal
         axis tight
     end    
-% end
 end
+%end
 end
 
 
